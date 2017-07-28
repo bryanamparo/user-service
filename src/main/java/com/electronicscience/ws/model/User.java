@@ -3,6 +3,8 @@
  */
 package com.electronicscience.ws.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Object representation of user table.
  * 
@@ -54,9 +56,12 @@ public class User {
 	private String username;
 	private String password;
 	private String email;
+	@SerializedName("first_name")
 	private String firstName;
+	@SerializedName("last_name")
 	private String lastName;
 	private String status;
+	@SerializedName("modified_by")
 	private String modifiedBy;
 
 	/**

@@ -22,13 +22,23 @@ public class UserDao {
 	/**
 	 * Default Value: {@value}
 	 */
-	private static final String FIND_ALL_SQL = "SELECT id, username, password, email, first_name, last_name, status, modified_by FROM user";
+	private static final String FIND_ALL_SQL = "SELECT id, username, password, email, first_name, last_name, status, modified_by FROM user WHERE status='A'";
 
 	/**
 	 * Default Value: {@value}
 	 */
-	private static final String FIND_BY_ID_SQL = "SELECT id, username, password, email, first_name, last_name, status, modified_by FROM user WHERE id=?";
-
+	private static final String FIND_BY_ID_SQL = "SELECT id, username, password, email, first_name, last_name, status, modified_by FROM user WHERE id=? AND status='A'";
+	
+	/**
+	 * Default Value: {@value}
+	 */
+	private static final String LOGIN_SQL = "SELECT id, username, password, email, first_name, last_name, status, modified_by FROM user WHERE username=? AND password=? AND status='A'";
+	
+	/**
+	 * Default Value: {@value}
+	 */
+	private static final String FIND_BY_USERNAME_AND_EMAIL_SQL = "SELECT id, username, email FROM user WHERE username = ? OR email = ?";
+	
 	/**
 	 * Default Value: {@value}
 	 */
@@ -42,7 +52,7 @@ public class UserDao {
 	/**
 	 * Default Value: {@value}
 	 */
-	private static final String DELETE_BY_ID_SQL = "DELETE FROM user WHERE id=?";
+	private static final String DELETE_BY_ID_SQL = "UPDATE user SET status='D' WHERE id=?"; //"DELETE FROM user WHERE id=?";
 
 	private final DataHelper dataHelper;
 
@@ -151,4 +161,50 @@ public class UserDao {
 		SqlParameter[] parameters = { new SqlParameter(id, Types.INTEGER) };
 		dataHelper.execute(DELETE_BY_ID_SQL, parameters);
 	}
+	
+	/**
+	 * 
+	 * Find user by username and email
+	 * 
+	 * @param String username, String email
+	 * @throws SQLException if a database access error occurs or this method is
+	 * called on a closed connection
+	 */
+	public User findByUsernameAndEmail(String username, String email) throws SQLException {
+		SqlParameter[] parameters = { new SqlParameter(username, Types.VARCHAR),
+									  new SqlParameter(email, Types.VARCHAR) };
+		return dataHelper.queryOne(FIND_BY_USERNAME_AND_EMAIL_SQL, parameters, (rs) -> {
+			User user = new User();
+			user.setId(rs.getInt(User.ID));
+			user.setUsername(rs.getString(User.USERNAME));
+			user.setEmail(rs.getString(User.EMAIL));
+			return user;
+		});
+	}
+	
+	/**
+	 * 
+	 * Login using username and password
+	 * 
+	 * @param String username, String password
+	 * @throws SQLException if a database access error occurs or this method is
+	 * called on a closed connection
+	 */
+	public User login(String username, String password) throws SQLException {
+		SqlParameter[] parameters = { new SqlParameter(username, Types.VARCHAR),
+									  new SqlParameter(password, Types.VARCHAR) };
+		return dataHelper.queryOne(LOGIN_SQL, parameters, (rs) -> {
+			User user = new User();
+			user.setId(rs.getInt(User.ID));
+			user.setUsername(rs.getString(User.USERNAME));
+			user.setPassword(rs.getString(User.PASSWORD));
+			user.setEmail(rs.getString(User.EMAIL));
+			user.setFirstName(rs.getString(User.FIRST_NAME));
+			user.setLastName(rs.getString(User.LAST_NAME));
+			user.setStatus(rs.getString(User.STATUS));
+			user.setModifiedBy(rs.getString(User.MODIFIED_BY));
+			return user;
+		});
+	}
+	
 }

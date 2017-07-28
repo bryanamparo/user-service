@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import com.electronicscience.ws.service.DeleteUserByIdService;
 import com.electronicscience.ws.service.GetUserByIdService;
 import com.electronicscience.ws.service.GetUserService;
+import com.electronicscience.ws.service.LoginService;
 import com.electronicscience.ws.service.UpsertUserService;
 import com.electronicscience.ws.util.Jndi;
 import com.google.gson.Gson;
@@ -43,5 +44,8 @@ public class Application implements SparkApplication {
 
 		// Insert or update user.
 		post("/", "application/json;charset=UTF-8", new UpsertUserService(gson, logger, dataSource), gson::toJson);
+		
+		//Login
+		post("/login", "application/json;charset=UTF-8", new LoginService(gson, logger, dataSource), gson::toJson);
 	}
 }

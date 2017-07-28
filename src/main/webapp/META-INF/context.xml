@@ -6,7 +6,7 @@
               defaultTransactionIsolation="READ_COMMITTED"
               driverClassName="org.mariadb.jdbc.Driver"
               url="jdbc:mysql://localhost:3306/training"
-              username="root" password=""
+              username="root" password="pass@2009"
               maxTotal="100" maxIdle="30" maxWaitMillis="10000"
               removeAbandoned="true" removeAbandonedTimeout="60" />
 </Context>
