@@ -39,10 +39,10 @@ public class LoginService extends AbstractService{
 			Logger logger = Logger.getLogger(LoginService.class);
 			logger.info("username: " + username + " password: "+ password);
 			
-			if (username == null) {
+			if (username == null || username.isEmpty()) {
 				throw new ClientException("Please specify username");
 			}
-			if (password == null) {
+			if (password == null || password.isEmpty()) {
 				throw new ClientException("Please specify password");
 			}
 			
@@ -54,7 +54,6 @@ public class LoginService extends AbstractService{
 			else {
 				throw new ClientException("Username/password does not match");
 			}
-			serviceResponse.setMessage("aaaA");
 			serviceResponse.setUsers(users);
 		}
 		return serviceResponse;
